@@ -1,9 +1,10 @@
 from httpx import Response
 from typing import TypedDict
 from clients.api_client import ApiClient
+from clients.public_http_builder import get_public_http_client
 
 
-class CreateUserRequest(TypedDict):
+class CreateUserRequestDict(TypedDict):
     """
     Структура данных для создания пользователя.
 
@@ -20,6 +21,17 @@ class CreateUserRequest(TypedDict):
     firstName: str
     middleName: str
 
+class User(TypedDict):
+    id: str
+    email: str
+    lastName: str
+    firstName: str
+    middleName: str
+
+class CreateUserResponseDict(TypedDict):
+    user: User
+
+
 
 class PublicUsersClient(ApiClient):
     """
@@ -28,7 +40,7 @@ class PublicUsersClient(ApiClient):
     Содержит методы, не требующие авторизации, такие как создание пользователя.
     """
 
-    def create_user_api(self, request: CreateUserRequest) -> Response:
+    def create_user_api(self, request: CreateUserRequestDict) -> Response:
         """
         Создание нового пользователя через API.
 
@@ -46,17 +58,12 @@ class PublicUsersClient(ApiClient):
         Returns:
             Response: Объект ответа от сервера с информацией о созданном
                      пользователе или ошибке валидации.
-
-        Example:
-            >>> client = PublicUsersClient(http_client)
-            >>> response = client.create_user_api({
-            ...     "email": "user@example.com",
-            ...     "password": "secret123",
-            ...     "lastName": "Ivanov",
-            ...     "firstName": "Ivan",
-            ...     "middleName": "Ivanovich"
-            ... })
-            >>> print(response.status_code)
-            201
         """
         return self.post("/api/v1/users", json=request)
+
+    def create_user(self, request: CreateUserRequestDict) -> Response:
+        response = self.create_user_api(request)
+        return response.json()
+
+def get_public_users_client():
+    return PublicUsersClient(client=get_public_http_client())
