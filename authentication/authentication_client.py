@@ -1,34 +1,28 @@
 from httpx import Response
 
+from authentication.authentication_schema import LoginRequestSchema, RefreshedRequestSchema, LoginResponseSchema
 from clients.api_client import ApiClient
-from typing import TypedDict
-
 from clients.public_http_builder import get_public_http_client
 
 
-class LoginRequestDict(TypedDict):
-    email: str
-    password: str
-
-class RefreshedRequestDict(TypedDict):
-    refreshToken: str
-
-class Token(TypedDict):
-    tokenType: str
-    accessToken: str
-    refreshToken: str
-
-class LoginResponseDict(TypedDict):
-    token: Token
 
 class AuthenticationClient(ApiClient):
-    def login_api(self, request: LoginRequestDict) -> Response:
-        return self.post("/api/v1/authentication/login", json=request)
-    def refresh_api(self, request: RefreshedRequestDict) -> Response:
-        return self.post("/api/v1/authentication/refresh", json=request)
-    def login_api(self, request: LoginRequestDict) -> Response:
-        return self.client.post("/api/v1/authentication/login", json=request)
-        return response.json()
+
+    def login_api(self, request: LoginRequestSchema) -> Response:
+        return self.post(
+            "/api/v1/authentication/login",
+            json=request.model_dump(by_alias=True)
+         )
+
+    def refresh_api(self, request: RefreshedRequestSchema) -> Response:
+        return self.post("/api/v1/authentication/refresh",
+        json=request.model_dump(by_alias=True)
+        )
+
+    def login(self, request: LoginRequestSchema) -> LoginResponseSchema:
+        response = self.login_api(request)
+        return LoginResponseSchema.model_validate_json(response.text)
+
 
 
 def get_authentication_client() -> AuthenticationClient:
