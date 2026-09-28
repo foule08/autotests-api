@@ -13,10 +13,10 @@ class PrivateUsersClient(ApiClient):
         return self.get(f"/api/v1/users/{user_id}")
 
     def update_user_api(self, user_id: str, request: UpdateUserRequestSchema):
-        return self.patch(URL(f"/api/v1/users/{user_id}"), json=request.model_dump(by_alias=True))
+        return self.patch(f"/api/v1/users/{user_id}", json=request.model_dump(by_alias=True))
 
     def delete_user_api(self, user_id: str):
-        return self.delete(URL(f"/api/v1/users/{user_id}"))
+        return self.delete(f"/api/v1/users/{user_id}")
 
     def get_user(self, user_id: str) -> GetUserResponseSchema:
         response = self.get_get_user_me_api(user_id)
