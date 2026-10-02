@@ -12,3 +12,8 @@ def assert_equal(actual: Any, expected: Any, name: str):
         f'Expected: {expected}. ' 
         f'Actual: {actual}. '
     )
+def assert_is_true(actual: Any, name: str):
+    assert actual, (
+        f'Incorrect value: "{name}". '
+        f'Expected true value but got: {actual}'
+    )
