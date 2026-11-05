@@ -1,12 +1,13 @@
 from httpx import Client
 from authentication.authentication_client import get_authentication_client, LoginRequestSchema
 from pydantic import BaseModel
+from functools import lru_cache
 
-class AuthenticationUserSchema(BaseModel):
+class AuthenticationUserSchema(BaseModel, frozen=True):
     email: str
     password: str
 
-
+@lru_cache(maxsize=None)
 def get_private_http_client(user: AuthenticationUserSchema):
     authentication_client = get_authentication_client()
 
@@ -19,3 +20,4 @@ def get_private_http_client(user: AuthenticationUserSchema):
         base_url="http://127.0.0.1:8000",
         headers={"Authorization": f"Bearer {login_response.token.access_token}"}
     )
+
