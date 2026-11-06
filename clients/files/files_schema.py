@@ -15,3 +15,6 @@ class FileSchema(BaseModel):
 
 class CreateFileResponseSchema(BaseModel):
     file: FileSchema
+
+class GetFileResponseSchema(BaseModel):
+    file: FileSchema
