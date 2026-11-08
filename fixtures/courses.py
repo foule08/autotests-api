@@ -14,12 +14,22 @@ class CourseFixture(BaseModel):
 def courses_client(function_user: UserFixture) -> CoursesClient:
     return get_courses_client(function_user.authentication_user)
 
+
 @pytest.fixture
 def function_course(
         courses_client: CoursesClient,
         function_user: UserFixture,
         function_file: FileFixture
 ) -> CourseFixture:
-    request = CreateCourseRequestSchema()
-    response = courses_client.create_course(request)
-    return CourseFixture(response=response, request=request)
+    request = CreateCourseRequestSchema(
+        file_id=function_file.response.file.id,
+        created_by_user_id=function_user.response.user.id
+    )
+
+    response = courses_client.create_course_api(request)
+    response.raise_for_status()
+
+    return CourseFixture(
+        request=request,
+        response=CreateCourseResponseSchema.model_validate_json(response.text)
+    )

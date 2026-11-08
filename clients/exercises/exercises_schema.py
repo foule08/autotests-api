@@ -1,13 +1,10 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from tools.fakers import Fake, fake
 
 
 class GetExercisesQuerySchema(BaseModel):
-    """
-    Описание структуры запроса на получение упражнений
-    """
-
+    model_config = ConfigDict(populate_by_name=True)
     course_id: str = Field(alias="courseId")
 
 

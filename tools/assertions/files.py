@@ -1,8 +1,9 @@
 from clients.files.files_schema import CreateFileRequestSchema, CreateFileResponseSchema, FileSchema, \
     GetFileResponseSchema
-from clients.users.errors_schema import InternalErrorResponseSchema
+from clients.users.errors_schema import ValidationErrorResponseSchema, ValidationErrorSchema, \
+    InternalErrorResponseSchema
 from tools.assertions.base import assert_equal
-from tools.assertions.errors import assert_internal_error_response
+from tools.assertions.errors import assert_validation_error_response, assert_internal_error_response
 
 
 def assert_create_file_response(request: CreateFileRequestSchema, response: CreateFileResponseSchema):
@@ -27,3 +28,19 @@ def assert_get_file_response(
 def assert_file_not_found_response(actual: InternalErrorResponseSchema):
     expected = InternalErrorResponseSchema(detail="File not found")
     assert_internal_error_response(actual, expected)
+
+
+
+def assert_get_file_with_incorrect_file_id_response(actual: ValidationErrorResponseSchema):
+    expected = ValidationErrorResponseSchema(
+        details=[
+            ValidationErrorSchema(
+                type="uuid_parsing",
+                input="incorrect-file-id",
+                context={"error": "invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `i` at 1"},
+                msg="Input should be a valid UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `i` at 1",
+                loc=["path", "file_id"],
+            )
+        ]
+    )
+    assert_validation_error_response(actual, expected)

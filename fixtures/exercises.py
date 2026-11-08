@@ -20,7 +20,7 @@ class ClientFixture:
 
 
 @pytest.fixture
-def function_exercise(exercises_client, function_course: CourseFixture):   # ← pytest сначала создаст курс
-    request = CreateExerciseRequestSchema(courseId=function_course.response.course.id)   # ← берём id реального курс)
-    response = exercises_client.create_exercise(request)
+def function_exercise(exercise_client, function_course: CourseFixture):
+    request = CreateExerciseRequestSchema(courseId=function_course.response.course.id)
+    response = exercise_client.create_exercise(request)
     return ExerciseFixture(request=request, response=response)
