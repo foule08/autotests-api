@@ -1,20 +1,25 @@
 from httpx import URL
 from typing import TypedDict
+import allure
 from clients.api_client import ApiClient
 from clients.private_http_builder import get_private_http_client, AuthenticationUserSchema
 from clients.users.user_schema import GetUserResponseSchema, UpdateUserRequestSchema
 
 class PrivateUsersClient(ApiClient):
+    @allure.step("Get current user")
     def get_user_me_api(self):
         return self.get('/api/v1/users/me')
 
+    @allure.step("Get user by id {user_id}")
     def get_get_user_me_api(self, user_id: str):
         response = self.get(f"/api/v1/users/{user_id}")
         return self.get(f"/api/v1/users/{user_id}")
 
+    @allure.step("Update user by id {user_id}")
     def update_user_api(self, user_id: str, request: UpdateUserRequestSchema):
         return self.patch(f"/api/v1/users/{user_id}", json=request.model_dump(by_alias=True))
 
+    @allure.step("Delete user by id {user_id}")
     def delete_user_api(self, user_id: str):
         return self.delete(f"/api/v1/users/{user_id}")
 

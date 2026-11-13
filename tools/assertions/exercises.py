@@ -1,8 +1,4 @@
-from pydantic import Field
-
-from clients.exercises.exercises_schema import CreateExerciseResponseSchema, CreateExerciseRequestSchema, \
-    GetExercisesQuerySchema, GetExercisesResponseSchema, GetExerciseResponseSchema, ExerciseSchema, \
-    UpdateExerciseResponseSchema, UpdateExerciseRequestSchema
+from clients.exercises.exercises_schema import CreateExerciseResponseSchema, CreateExerciseRequestSchema, GetExerciseResponseSchema, ExerciseSchema, UpdateExerciseResponseSchema, UpdateExerciseRequestSchema
 from clients.users.errors_schema import InternalErrorResponseSchema
 from tools.assertions.base import assert_equal
 from tools.assertions.errors import assert_internal_error_response
@@ -76,10 +72,3 @@ def assert_update_exercise_response(
 def assert_exercise_not_found_response(actual: InternalErrorResponseSchema):
     expected = InternalErrorResponseSchema(detail="Exercise not found")
     assert_internal_error_response(actual, expected)
-
-def assert_get_exercises_response(
-    get_exercise_response: GetExercisesResponseSchema,
-    create_exercise_response: CreateExerciseResponseSchema,
-):
-
-    assert_exercise(get_exercise_response.exercise, create_exercise_response.exercise)

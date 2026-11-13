@@ -1,17 +1,21 @@
+import allure
 import pytest
 from _pytest.fixtures import SubRequest
 
 
+@allure.title("Numbers")
 @pytest.mark.parametrize("number", [1, 2, 3, -1])
 def test_numbers(number: int):
     assert number > 0
 
 
+@allure.title("Several Numbers")
 @pytest.mark.parametrize("number, expected", [(1, 1), (2, 4), (3, 9)])
 def test_several_numbers(number: int, expected: int):
     assert number ** 2 == expected
 
 
+@allure.title("Multiplication Of Numbers")
 @pytest.mark.parametrize("os", ["macos", "windows", "linux", "debian"])
 @pytest.mark.parametrize("host", [
     "https://dev.company.com",
@@ -31,15 +35,18 @@ def host(request: SubRequest) -> str:
     return request.param
 
 
+@allure.title("Host")
 def test_host(host: str):
     print(f"Running test on host: {host}")
 
 
 @pytest.mark.parametrize("user", ["Alice", "Zara"])
 class TestOperations:
+    @allure.title("User With Operations")
     def test_user_with_operations(self, user: str):
         print(f"User with operations: {user}")
 
+    @allure.title("User Without Operations")
     def test_user_without_operations(self, user: str):
         print(f"User without operations: {user}")
 
@@ -51,6 +58,7 @@ users = {
 }
 
 
+@allure.title("Identifiers")
 @pytest.mark.parametrize(
     "phone_number",
     users.keys(),
