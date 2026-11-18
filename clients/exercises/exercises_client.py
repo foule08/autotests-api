@@ -28,7 +28,7 @@ class ExercisesClient(ApiClient):
         :return: Сырой ответ сервера (httpx.Response).
         """
         # ✅ Обращаемся к полю через точку, используем by_alias для camelCase
-        return self.client.get(
+        return self.get(
             "/api/v1/exercises",
             params=query.model_dump(by_alias=True, exclude_none=True),
         )
@@ -52,7 +52,7 @@ class ExercisesClient(ApiClient):
         :param exercise_id: UUID упражнения.
         :return: Сырой ответ сервера (httpx.Response).
         """
-        return self.client.get(f"/api/v1/exercises/{exercise_id}")
+        return self.get(f"/api/v1/exercises/{exercise_id}")
 
     def get_exercise(self, exercise_id: str) -> GetExerciseResponseSchema:
         """
@@ -73,7 +73,7 @@ class ExercisesClient(ApiClient):
         :param request: Pydantic-модель с данными для создания.
         :return: Сырой ответ сервера (httpx.Response).
         """
-        return self.client.post(
+        return self.post(
             "/api/v1/exercises",
             json=request.model_dump(by_alias=True),
         )
@@ -103,7 +103,7 @@ class ExercisesClient(ApiClient):
         :return: Сырой ответ сервера (httpx.Response).
         """
         # ✅ exclude_unset=True — отправляем только явно заданные поля
-        return self.client.patch(
+        return self.patch(
             f"/api/v1/exercises/{exercise_id}",
             json=request.model_dump(by_alias=True, exclude_unset=True),
         )
@@ -131,7 +131,7 @@ class ExercisesClient(ApiClient):
         :return: Сырой ответ сервера (httpx.Response).
         """
         # ✅ Исправлена опечатка: exercises (с 's')
-        return self.client.delete(f"/api/v1/exercises/{exercise_id}")
+        return self.delete(f"/api/v1/exercises/{exercise_id}")
 
 
 def get_exercises_client(user: AuthenticationUserSchema) -> ExercisesClient:

@@ -27,7 +27,7 @@ class CoursesClient(ApiClient):
         :param query: Словарь с userId.
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.client.get(
+        return self.get(
             "/api/v1/courses", params=query.model_dump(by_alias=True)
         )
 
@@ -40,7 +40,7 @@ class CoursesClient(ApiClient):
         previewFileId, createdByUserId.
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.client.post(
+        return self.post(
             "/api/v1/courses", json=request.model_dump(by_alias=True)
         )
 
@@ -61,7 +61,7 @@ class CoursesClient(ApiClient):
         :param course_id: Идентификатор курса.
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.client.get(f"/api/v1/courses/{course_id}")
+        return self.get(f"/api/v1/courses/{course_id}")
 
     @allure.step("Update course by id {course_id}")
     def update_course_api(
@@ -74,7 +74,7 @@ class CoursesClient(ApiClient):
         :param request: Словарь с title, maxScore, minScore, description, estimatedTime.
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.client.patch(
+        return self.patch(
             f"/api/v1/courses/{course_id}",
             json=request.model_dump(by_alias=True, exclude_none=True),
         )
@@ -87,7 +87,7 @@ class CoursesClient(ApiClient):
         :param course_id: Идентификатор курса.
         :return: Ответ от сервера в виде объекта httpx.Response
         """
-        return self.client.delete(f"/api/v1/courses/{course_id}")
+        return self.delete(f"/api/v1/courses/{course_id}")
 
 
 def get_courses_client(user: AuthenticationUserSchema) -> CoursesClient:
