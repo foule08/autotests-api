@@ -1,0 +1,9 @@
+httpx==0.28.1
+pydantic==2.13.5
+pydantic-settings==2.16.3
+pytest==9.1.1
+pytest-xdist==3.8.0
+allure-pytest==2.16.2
+allure-python-commons==2.16.2
+Faker==40.39.0
+jsonschema==4.26.0
