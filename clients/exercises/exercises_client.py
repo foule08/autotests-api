@@ -12,6 +12,7 @@ from clients.exercises.exercises_schema import (
     UpdateExerciseResponseSchema,
 )
 from clients.private_http_builder import get_private_http_client, AuthenticationUserSchema
+from tools.routes import APIRoutes
 
 
 class ExercisesClient(ApiClient):
@@ -29,7 +30,7 @@ class ExercisesClient(ApiClient):
         """
         # ✅ Обращаемся к полю через точку, используем by_alias для camelCase
         return self.get(
-            "/api/v1/exercises",
+            APIRoutes.EXERCISES,
             params=query.model_dump(by_alias=True, exclude_none=True),
         )
 
@@ -52,7 +53,7 @@ class ExercisesClient(ApiClient):
         :param exercise_id: UUID упражнения.
         :return: Сырой ответ сервера (httpx.Response).
         """
-        return self.get(f"/api/v1/exercises/{exercise_id}")
+        return self.get(APIRoutes.EXERCISE_BY_ID.value.format(exercise_id=exercise_id))
 
     def get_exercise(self, exercise_id: str) -> GetExerciseResponseSchema:
         """
@@ -74,7 +75,7 @@ class ExercisesClient(ApiClient):
         :return: Сырой ответ сервера (httpx.Response).
         """
         return self.post(
-            "/api/v1/exercises",
+            APIRoutes.EXERCISES,
             json=request.model_dump(by_alias=True),
         )
 
@@ -104,7 +105,7 @@ class ExercisesClient(ApiClient):
         """
         # ✅ exclude_unset=True — отправляем только явно заданные поля
         return self.patch(
-            f"/api/v1/exercises/{exercise_id}",
+            APIRoutes.EXERCISE_BY_ID.value.format(exercise_id=exercise_id),
             json=request.model_dump(by_alias=True, exclude_unset=True),
         )
 
@@ -131,7 +132,7 @@ class ExercisesClient(ApiClient):
         :return: Сырой ответ сервера (httpx.Response).
         """
         # ✅ Исправлена опечатка: exercises (с 's')
-        return self.delete(f"/api/v1/exercises/{exercise_id}")
+        return self.delete(APIRoutes.EXERCISE_BY_ID.value.format(exercise_id=exercise_id))
 
 
 def get_exercises_client(user: AuthenticationUserSchema) -> ExercisesClient:

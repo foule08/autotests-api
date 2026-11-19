@@ -47,6 +47,7 @@ class TestFiles:
     @allure.title("Get File")
     @allure.severity(Severity.CRITICAL)
     @allure.sub_suite(AllureStory.GET_ENTITY)
+    @pytest.mark.xdist_group("files")
     def test_get_file(self, files_client: FilesClient, function_file: FileFixture):
         response = files_client.get_file_api(function_file.response.file.id)
         response_data = GetFileResponseSchema.model_validate_json(response.text)
@@ -95,6 +96,7 @@ class TestFiles:
     @allure.title("Delete File")
     @allure.severity(Severity.NORMAL)
     @allure.sub_suite(AllureStory.DELETE_ENTITY)
+    @pytest.mark.xdist_group("files")
     def test_delete_file(self, files_client: FilesClient, function_file: FileFixture):
         delete_response = files_client.delete_file_api(function_file.response.file.id)
         assert_status_code(delete_response.status_code, HTTPStatus.OK)
